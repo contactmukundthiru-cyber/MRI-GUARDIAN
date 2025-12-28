@@ -1,0 +1,19 @@
+# MRI-GUARDIAN Streamlit App Requirements
+# ========================================
+# Minimal dependencies for Streamlit Cloud deployment
+# Install with: pip install -r requirements.txt
+
+# Dashboard framework
+streamlit>=1.28.0
+
+# Visualization
+matplotlib>=3.7.0
+plotly>=5.18.0
+
+# Scientific computing
+numpy>=1.24.0
+scipy>=1.10.0
+pandas>=2.0.0
+
+# Image processing (for demo generation)
+Pillow>=9.4.0

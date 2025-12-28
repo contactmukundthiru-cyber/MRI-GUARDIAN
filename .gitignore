@@ -1,0 +1,82 @@
+# MRI-GUARDIAN .gitignore
+# ========================
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+myenv/
+env/
+.env/
+ENV/
+
+# IDEs
+.idea/
+.vscode/
+.claude/
+*.swp
+*.swo
+*~
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data (large files)
+data/
+*.h5
+*.hdf5
+*.npy
+*.npz
+*.nii
+*.nii.gz
+*.dcm
+
+# Model checkpoints
+checkpoints/
+*.pt
+*.pth
+*.ckpt
+saved_models/
+
+# Results and logs
+results/
+logs/
+wandb/
+runs/
+*.log
+
+# Streamlit secrets (NEVER commit)
+.streamlit/secrets.toml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary
+*.tmp
+*.temp
+*.bak
+
+# Keep config.toml for deployment
+!app/.streamlit/config.toml
+!dashboard/.streamlit/config.toml

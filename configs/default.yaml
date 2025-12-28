@@ -1,0 +1,111 @@
+# MRI-GUARDIAN Default Configuration
+# ===================================
+
+# Data Configuration
+data:
+  root: "data/fastmri"
+  challenge: "singlecoil"
+  train_split: "train"
+  val_split: "val"
+  sample_rate: 1.0  # Fraction of data to use (for debugging)
+  crop_size: [320, 320]
+
+# Undersampling Configuration
+undersampling:
+  acceleration: 4
+  center_fraction: 0.08
+  mask_type: "random"  # random, equispaced, gaussian
+
+# Model Configuration
+model:
+  # Guardian model
+  guardian:
+    num_iterations: 8
+    base_channels: 48
+    num_levels: 4
+    use_kspace_net: true
+    use_image_net: true
+    use_score_net: true
+    dc_mode: "soft"
+    learnable_dc: true
+    dropout: 0.0
+    use_attention: true
+
+  # UNet baseline
+  unet:
+    in_channels: 1
+    out_channels: 1
+    base_channels: 64
+    num_levels: 4
+    use_residual: true
+    use_attention: false
+    dropout: 0.0
+    residual_learning: true
+
+  # Black-box model
+  blackbox:
+    base_channels: 64
+    num_levels: 4
+    include_hallucination: true
+
+# Training Configuration
+training:
+  epochs: 50
+  batch_size: 4
+  learning_rate: 0.0001
+  weight_decay: 0.0
+  optimizer: "adam"
+  scheduler: "cosine"
+  warmup_epochs: 5
+  gradient_clip: 1.0
+
+  # Loss weights
+  loss:
+    l1_weight: 1.0
+    ssim_weight: 0.1
+    dc_weight: 0.1
+    intermediate_weight: 0.1
+
+# Evaluation Configuration
+evaluation:
+  batch_size: 1
+  num_samples: 100  # Number of samples to evaluate
+  compute_uncertainty: true
+  uncertainty_samples: 10
+
+# Auditor Configuration
+auditor:
+  detection_threshold: 0.15
+  use_uncertainty: true
+  weights:
+    intensity: 0.5
+    structural: 0.3
+    frequency: 0.2
+
+# Hallucination Configuration
+hallucination:
+  lesion_prob: 0.3
+  num_lesions_range: [1, 3]
+  lesion_size_range: [4, 12]
+  lesion_intensity_range: [0.3, 0.8]
+  texture_prob: 0.2
+  sharpen_prob: 0.2
+  smooth_prob: 0.2
+
+# Experiment Configuration
+experiment:
+  output_dir: "results"
+  checkpoint_dir: "checkpoints"
+  log_dir: "logs"
+  seed: 42
+  device: "cuda"  # cuda or cpu
+  num_workers: 4
+  save_images: true
+  save_frequency: 5  # Save checkpoint every N epochs
+
+# Logging
+logging:
+  use_wandb: false
+  wandb_project: "mri-guardian"
+  use_tensorboard: true
+  log_interval: 100  # Log every N batches
