@@ -74,79 +74,50 @@ We propose a **physics-guided generative reconstruction model** that serves as a
 ## Project Structure
 
 ```
-MRI_Scan/
-├── mri_guardian/                 # Main package
-│   ├── __init__.py
+MRI-GUARDIAN/
+├── mri_guardian/                 # Core package
 │   ├── data/                     # Data loading & preprocessing
-│   │   ├── __init__.py
-│   │   ├── fastmri_loader.py     # fastMRI dataset interface
-│   │   ├── transforms.py         # Data augmentation & transforms
-│   │   └── kspace_ops.py         # k-space operations
-│   │
-│   ├── physics/                  # Physics-based operations
-│   │   ├── __init__.py
-│   │   ├── mri_physics.py        # MRI physics fundamentals
-│   │   ├── data_consistency.py   # DC layers
-│   │   └── sampling.py           # Undersampling patterns
-│   │
-│   ├── models/                   # Neural network models
-│   │   ├── __init__.py
+│   ├── physics/                  # MRI physics operations
+│   ├── models/                   # Neural network architectures
+│   │   ├── guardian.py           # Main Guardian model
 │   │   ├── unet.py               # UNet baseline
-│   │   ├── guardian.py           # Physics-guided Guardian model
-│   │   ├── dual_domain.py        # Dual-domain network
-│   │   ├── diffusion.py          # Score-based refinement
-│   │   └── blackbox.py           # Black-box model for testing
-│   │
-│   ├── implicit/                 # Implicit neural representations
-│   │   ├── __init__.py
-│   │   ├── siren.py              # SIREN architecture
-│   │   ├── fourier_features.py   # Fourier feature mapping
-│   │   └── inr_trainer.py        # INR training utilities
-│   │
-│   ├── auditor/                  # Hallucination detection
-│   │   ├── __init__.py
+│   │   └── diffusion.py          # Score-based refinement
+│   ├── implicit/                 # Implicit neural representations (SIREN)
+│   ├── auditor/                  # Hallucination detection (15 modules)
 │   │   ├── detector.py           # Main auditor class
-│   │   ├── hallucination.py      # Hallucination injection
-│   │   ├── discrepancy.py        # Discrepancy computation
-│   │   └── uncertainty.py        # Uncertainty estimation
-│   │
+│   │   ├── counterfactual.py     # Counterfactual hypothesis testing
+│   │   ├── spectral_fingerprint.py
+│   │   └── ...                   # Additional detection methods
 │   ├── metrics/                  # Evaluation metrics
-│   │   ├── __init__.py
-│   │   ├── image_quality.py      # PSNR, SSIM, NRMSE, HFEN
-│   │   ├── detection.py          # ROC, AUC, F1, precision/recall
-│   │   └── statistical.py        # Statistical tests
-│   │
-│   └── visualization/            # Visualization utilities
-│       ├── __init__.py
-│       ├── plotting.py           # General plotting
-│       ├── kspace_viz.py         # k-space visualization
-│       └── comparison.py         # Multi-image comparisons
+│   ├── safety/                   # Clinical safety framework
+│   ├── theory/                   # Mathematical foundations
+│   ├── acquisition/              # Adaptive k-space sampling
+│   └── visualization/            # Plotting utilities
 │
-├── experiments/                  # Experiment scripts
-│   ├── exp1_reconstruction.py    # H1: Reconstruction comparison
+├── experiments/                  # Validation experiments
+│   ├── exp1_reconstruction.py    # H1: Reconstruction quality
 │   ├── exp2_hallucination.py     # H2: Hallucination detection
 │   ├── exp3_robustness.py        # H3: Robustness study
-│   └── exp4_ablation.py          # Ablation studies
+│   ├── exp4_safety_framework.py  # Safety validation
+│   ├── exp5_lesion_detectability.py
+│   ├── exp6_biological_plausibility.py
+│   ├── exp7_virtual_clinical_trial.py
+│   ├── exp8_ablation_study.py
+│   └── exp_novelty_counterfactual.py
 │
-├── scripts/                      # Utility scripts
-│   ├── download_data.py          # Data download helper
-│   ├── preprocess.py             # Preprocessing pipeline
-│   ├── train_guardian.py         # Train Guardian model
-│   ├── train_baseline.py         # Train baseline models
-│   └── evaluate.py               # Run evaluation
+├── scripts/                      # Training scripts
+│   └── train_guardian.py         # Main training script
 │
+├── training/                     # Training utilities
+│   ├── download_fastmri.py       # Dataset download
+│   └── train_guardian_rtx4090.py # GPU-optimized training
+│
+├── app/                          # Streamlit demo app
+├── dashboard/                    # Results visualization dashboard
+├── cloud/                        # Cloud training scripts
 ├── configs/                      # Configuration files
-│   ├── default.yaml              # Default config
-│   ├── fastmri_knee.yaml         # fastMRI knee config
-│   └── experiment_configs/       # Per-experiment configs
-│
-├── notebooks/                    # Jupyter notebooks for exploration
-│   └── exploration.ipynb
-│
-├── results/                      # Output directory (gitignored)
-├── checkpoints/                  # Model checkpoints (gitignored)
-├── requirements.txt              # Python dependencies
-└── setup.py                      # Package installation
+├── requirements.txt
+└── setup.py
 ```
 
 ## Quick Start
@@ -196,16 +167,18 @@ python scripts/preprocess.py --data_path data/fastmri --output_path data/process
 ### 3. Run Experiments
 
 ```bash
-# Train the Guardian model
-python scripts/train_guardian.py --config configs/fastmri_knee.yaml
+# Train with simulated data (no dataset required)
+python scripts/train_guardian.py --simulated
 
-# Run Experiment 1: Reconstruction comparison
+# Train with fastMRI dataset
+python scripts/train_guardian.py --config configs/default.yaml
+
+# Run all experiments
+python run_all_experiments.py
+
+# Or run individual experiments
 python experiments/exp1_reconstruction.py
-
-# Run Experiment 2: Hallucination detection
 python experiments/exp2_hallucination.py
-
-# Run Experiment 3: Robustness study
 python experiments/exp3_robustness.py
 ```
 
@@ -365,5 +338,3 @@ MIT License - See LICENSE file for details.
 ## Acknowledgments
 
 - fastMRI dataset provided by NYU Langone Health
-- Computational resources from [your institution]
-- Mentorship from [mentor name if applicable]
